@@ -1446,3 +1446,22 @@ func TestQuoteIdentifier(t *testing.T) {
 		}
 	}
 }
+
+func Test499(t *testing.T) {
+	db := openTestConn(t)
+	defer db.Close()
+
+	res, err := db.Exec(``)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log("RES", res)
+	ra, err := res.RowsAffected()
+	if err != nil {
+		t.Fatalf("Expexted RowsAffected to return no error, instead == %s\n", err.Error())
+
+	}
+	if ra != 0 {
+		t.Fatalf("Expected RowsAffected == 0, but instead == %d\n", ra)
+	}
+}

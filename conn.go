@@ -591,6 +591,8 @@ func (cn *conn) simpleExec(q string) (res driver.Result, commandTag string, err 
 	b.string(q)
 	cn.send(b)
 
+	res = driver.RowsAffected(0)
+
 	for {
 		t, r := cn.recv1()
 		switch t {
@@ -598,9 +600,6 @@ func (cn *conn) simpleExec(q string) (res driver.Result, commandTag string, err 
 			res, commandTag = cn.parseComplete(r.string())
 		case 'Z':
 			cn.processReadyForQuery(r)
-			if err == nil && res == nil {
-				res = driver.RowsAffected(0)
-			}
 			// done
 			return
 		case 'E':
